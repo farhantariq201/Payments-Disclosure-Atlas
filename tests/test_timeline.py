@@ -33,7 +33,7 @@ def _scenario():
     """FI names the theme in 2020; GPN not until 2023; TOST (2021 IPO) in 2021."""
     chunks, labels = [], {}
     plan = {
-        ("FI", 2020): True, ("FI", 2021): True, ("FI", 2022): True, ("FI", 2023): True,
+        ("FISV", 2020): True, ("FISV", 2021): True, ("FISV", 2022): True, ("FISV", 2023): True,
         ("GPN", 2020): False, ("GPN", 2021): False, ("GPN", 2022): False, ("GPN", 2023): True,
         ("TOST", 2021): True, ("TOST", 2022): True, ("TOST", 2023): True,
     }
@@ -54,13 +54,13 @@ def _panel():
 def test_panel_covers_every_theme_year_combination():
     panel, _ = _panel()
     taxonomy = load_taxonomy(CONFIG / "taxonomy.yaml")
-    fi_2020 = [r for r in panel if r.ticker == "FI" and r.fiscal_year == 2020]
+    fi_2020 = [r for r in panel if r.ticker == "FISV" and r.fiscal_year == 2020]
     assert len(fi_2020) == len(taxonomy.ids)
 
 
 def test_salience_normalises_for_filing_length():
     panel, _ = _panel()
-    row = next(r for r in panel if r.ticker == "FI" and r.fiscal_year == 2020 and r.theme == THEME)
+    row = next(r for r in panel if r.ticker == "FISV" and r.fiscal_year == 2020 and r.theme == THEME)
     assert row.mentions == 1 and row.total_chunks == 4
     assert row.salience == 0.25
 
@@ -68,7 +68,7 @@ def test_salience_normalises_for_filing_length():
 def test_first_mention_identifies_the_leader_and_the_laggard():
     panel, peers = _panel()
     records = {f.ticker: f for f in first_mentions(panel, peers) if f.theme == THEME}
-    assert records["FI"].year == 2020
+    assert records["FISV"].year == 2020
     assert records["GPN"].year == 2023
 
 
@@ -79,14 +79,14 @@ def test_ipo_year_first_mention_is_flagged_as_censored():
     records = {f.ticker: f for f in first_mentions(panel, peers) if f.theme == THEME}
     assert records["TOST"].year == 2021
     assert records["TOST"].censored is True
-    assert records["FI"].censored is False
+    assert records["FISV"].censored is False
 
 
 def test_peer_median_excludes_censored_companies():
     panel, peers = _panel()
     records = {f.ticker: f for f in first_mentions(panel, peers) if f.theme == THEME}
     # Median over full-history companies only: FI 2020, GPN 2023 -> 2021.5
-    assert records["FI"].lag_vs_peers == -1.5
+    assert records["FISV"].lag_vs_peers == -1.5
     assert records["GPN"].lag_vs_peers == 1.5
 
 
@@ -125,11 +125,11 @@ def test_escalation_table_needs_a_prior_year():
 def test_financial_join_computes_cagr_and_keeps_censoring():
     panel, peers = _panel()
     first = first_mentions(panel, peers)
-    revenue = {"FI": {2020: 100.0, 2025: 200.0}, "GPN": {2020: 100.0, 2025: 100.0}}
+    revenue = {"FISV": {2020: 100.0, 2025: 200.0}, "GPN": {2020: 100.0, 2025: 100.0}}
     joined = {r["ticker"]: r for r in join_financials(
         first, revenue, THEME, start_year=2020, end_year=2025
     )}
-    assert joined["FI"]["revenue_cagr"] == round(2 ** (1 / 5) - 1, 4)
+    assert joined["FISV"]["revenue_cagr"] == round(2 ** (1 / 5) - 1, 4)
     assert joined["GPN"]["revenue_cagr"] == 0.0
     assert joined["TOST"]["censored"] is True
 

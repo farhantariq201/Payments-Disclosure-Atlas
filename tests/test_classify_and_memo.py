@@ -139,8 +139,8 @@ def _panel_fixture():
     for year in (2022, 2023):
         for ordinal in range(3):
             chunk = Chunk(
-                chunk_id=f"FI-{year}-item1a-{ordinal:04d}",
-                ticker="FI",
+                chunk_id=f"FISV-{year}-item1a-{ordinal:04d}",
+                ticker="FISV",
                 fiscal_year=year,
                 item="item1a",
                 ordinal=ordinal,
@@ -161,16 +161,16 @@ def test_company_memo_renders_with_tables_and_quotes():
     chunks, labels, peers, taxonomy = _panel_fixture()
     panel = build_panel(chunks, labels, peers, taxonomy)
     document = CompanyMemo(
-        ticker="FI",
+        ticker="FISV",
         name="Fiserv, Inc.",
         cohort="incumbent",
         fiscal_years=[2022, 2023],
         financials={"Revenue": {2022: 1e9, 2023: 1.2e9}},
-        theme_rows=[r for r in panel if r.ticker == "FI"],
+        theme_rows=[r for r in panel if r.ticker == "FISV"],
         quotes=[("isv_channel_displacement", 2023, "Competition is intensifying.")],
     ).render(taxonomy)
 
-    assert "Fiserv, Inc. (FI)" in document
+    assert "Fiserv, Inc. (FISV)" in document
     assert "ISV channel displacement" in document
     assert "1,200" in document           # revenue rendered in millions
     assert "as first filed" in document  # restatement caveat survives

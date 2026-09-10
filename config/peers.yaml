@@ -22,7 +22,7 @@ cohorts:
       when each one began describing integrated software vendors as a
       competitive threat rather than a distribution partner.
     members:
-      - { ticker: FI,   name: "Fiserv, Inc." }
+      - { ticker: FISV,   name: "Fiserv, Inc." }
       - { ticker: FIS,  name: "Fidelity National Information Services, Inc." }
       - { ticker: GPN,  name: "Global Payments Inc." }
       - { ticker: CPAY, name: "Corpay, Inc." }          # formerly FLEETCOR (FLT) until 2024

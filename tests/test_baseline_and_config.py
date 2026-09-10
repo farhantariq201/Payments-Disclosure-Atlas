@@ -40,7 +40,7 @@ def test_peer_tickers_are_unique_and_cohorts_resolve():
 def test_partial_history_censoring_reads_back():
     peers = _peers()
     assert peers.first_covered_year("TOST") == 2021
-    assert peers.first_covered_year("FI") == peers.study.start_fiscal_year
+    assert peers.first_covered_year("FISV") == peers.study.start_fiscal_year
 
 
 def test_invented_labels_are_stripped():
@@ -73,7 +73,7 @@ def test_baseline_abstains_on_boilerplate():
 def _fake_chunks(n=60):
     out = []
     for i in range(n):
-        ticker = ["FI", "TOST", "RELY"][i % 3]
+        ticker = ["FISV", "TOST", "RELY"][i % 3]
         text = (
             "We face competition from integrated software vendors bundling "
             "payments into vertical software platforms. " * 3

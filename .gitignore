@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+.env
+.DS_Store
+poetry.lock
+
+# Filings, XBRL dumps and LLM cache are large and reproducible from EDGAR.
+data/raw/
+data/interim/
+data/output/

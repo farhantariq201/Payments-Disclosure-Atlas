@@ -24,7 +24,7 @@ def _run():
         current = []
         for item, section in sections.items():
             current += chunk_section(
-                section.text, ticker="FI", fiscal_year=year, item=item,
+                section.text, ticker="FISV", fiscal_year=year, item=item,
                 filing_accession=f"acc-{year}", filing_date=f"{year+1}-02-20",
             )
         current = mark_novelty(current, prior)
@@ -75,7 +75,7 @@ def test_carried_forward_theme_is_present_but_not_new_in_year_two():
 def test_first_mention_reflects_the_earlier_year():
     _, _, panel, peers, _ = _run()
     records = {
-        f.theme: f for f in first_mentions(panel, peers) if f.ticker == "FI"
+        f.theme: f for f in first_mentions(panel, peers) if f.ticker == "FISV"
     }
     assert records["isv_channel_displacement"].year == 2023
     assert records["stablecoin_crypto_rails"].year == 2024
@@ -84,10 +84,10 @@ def test_first_mention_reflects_the_earlier_year():
 def test_memos_render_end_to_end():
     chunks, labels, panel, peers, taxonomy = _run()
     company = CompanyMemo(
-        ticker="FI", name="Fiserv, Inc.", cohort="incumbent",
+        ticker="FISV", name="Fiserv, Inc.", cohort="incumbent",
         fiscal_years=[2023, 2024],
         financials={"Revenue": {2023: 1.0e9, 2024: 1.1e9}},
-        theme_rows=[r for r in panel if r.ticker == "FI"],
+        theme_rows=[r for r in panel if r.ticker == "FISV"],
         quotes=[
             (theme, c.fiscal_year, c.text)
             for c in chunks for theme in labels.get(c.chunk_id, [])

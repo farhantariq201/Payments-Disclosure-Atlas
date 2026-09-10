@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from html import unescape as _unescape
 
 # Ordered so that "item 7a" is tried before "item 7" when scanning.
 ITEM_PATTERNS: list[tuple[str, str]] = [
@@ -26,7 +27,7 @@ ITEM_PATTERNS: list[tuple[str, str]] = [
     ("item2", r"item\s*2\s*[\.\:\-–—]?\s*properties"),
     ("item3", r"item\s*3\s*[\.\:\-–—]?\s*legal\s*proceedings"),
     ("item5", r"item\s*5\s*[\.\:\-–—]?\s*market\s*for"),
-    ("item7", r"item\s*7\s*[\.\:\-–—]?\s*management'?s?\s*discussion"),
+    ("item7", r"item\s*7\s*[\.\:\-–—,]?\s*management\W{0,3}s?\W{0,3}discussion"),
     ("item7a", r"item\s*7a\s*[\.\:\-–—]?\s*quantitative"),
     ("item8", r"item\s*8\s*[\.\:\-–—]?\s*financial\s*statements"),
     ("item9a", r"item\s*9a\s*[\.\:\-–—]?\s*controls"),
@@ -45,22 +46,12 @@ _BLOCK_RE = re.compile(
 _WS_RE = re.compile(r"[ \t\r\f\v]+")
 _NL_RE = re.compile(r"\n{3,}")
 
-_ENTITIES = {
-    "&nbsp;": " ",
-    "&#160;": " ",
-    "&#xa0;": " ",
-    "&amp;": "&",
-    "&#38;": "&",
-    "&lt;": "<",
-    "&gt;": ">",
-    "&quot;": '"',
-    "&#39;": "'",
-    "&rsquo;": "'",
-    "&lsquo;": "'",
-    "&ldquo;": '"',
-    "&rdquo;": '"',
-    "&mdash;": "—",
-    "&ndash;": "–",
+_PUNCTUATION = {
+    "\u2019": "'",
+    "\u2018": "'",
+    "\u201c": '"',
+    "\u201d": '"',
+    "\u00a0": " ",
 }
 
 
@@ -81,9 +72,12 @@ def html_to_text(html: str) -> str:
     out = _SCRIPT_RE.sub(" ", html)
     out = _BLOCK_RE.sub("\n", out)
     out = _TAG_RE.sub(" ", out)
-    for entity, replacement in _ENTITIES.items():
-        out = out.replace(entity, replacement)
-    out = re.sub(r"&#\d+;", " ", out)
+    # Decode entities properly. Filers encode the apostrophe in
+    # "Management's Discussion" as &#8217; -- deleting numeric entities
+    # instead of decoding them silently breaks Item 7 detection.
+    out = _unescape(out)
+    for source, replacement in _PUNCTUATION.items():
+        out = out.replace(source, replacement)
     out = _WS_RE.sub(" ", out)
     out = "\n".join(line.strip() for line in out.split("\n"))
     return _NL_RE.sub("\n\n", out).strip()
