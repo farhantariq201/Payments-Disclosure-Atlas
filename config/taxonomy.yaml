@@ -1,0 +1,261 @@
+# Theme taxonomy for payments disclosure analysis.
+#
+# Bump `version` whenever any definition, boundary or example changes. The
+# version string is part of the classifier cache key and is stamped into every
+# benchmark result, so a taxonomy edit invalidates old labels rather than
+# silently mixing two definitions in one dataset.
+version: "1.0.0"
+
+# Labels are multi-label: a paragraph may carry zero, one, or several themes.
+# "Zero" is the majority class and must stay in the gold set — a classifier
+# that never abstains will look good on recall and be useless in practice.
+
+themes:
+  - id: isv_channel_displacement
+    name: "ISV channel displacement"
+    definition: >
+      Competition from integrated software vendors, vertical SaaS, or platform
+      providers that own the merchant relationship and embed payments into
+      their own product, displacing the filer's direct or bank-referral channel.
+    includes:
+      - Naming software platforms or POS providers as competitors
+      - Loss of merchant relationships to bundled software offerings
+      - Statements that merchants increasingly buy payments through software
+    excludes:
+      - Generic competition language with no software/platform mechanism
+      - The filer describing its own software strategy (use embedded_finance_enablement)
+    keywords:
+      - "integrated software vendor"
+      - "independent software vendor"
+      - "software platform"
+      - "vertical software"
+      - "point-of-sale software"
+      - "embedded payments"
+      - "software-led"
+    examples:
+      positive:
+        - "Merchants increasingly obtain payment processing bundled with vertical software solutions, which has intensified competition for our direct sales channel."
+      negative:
+        - "The payments industry is highly competitive and we face competition from a number of established participants."
+
+  - id: embedded_finance_enablement
+    name: "Embedded finance enablement"
+    definition: >
+      The filer positioning itself as the infrastructure behind someone else's
+      product: payment facilitator-as-a-service, platform partnerships, APIs
+      sold to software companies, banking-as-a-service.
+    includes:
+      - PayFac-as-a-service, merchant-of-record services for platforms
+      - Distribution partnerships with software companies
+    excludes:
+      - Competitive threat framing (use isv_channel_displacement)
+    keywords:
+      - "payment facilitator"
+      - "payfac"
+      - "banking-as-a-service"
+      - "platform partners"
+      - "embedded finance"
+      - "api-based"
+    examples:
+      positive:
+        - "We provide payment facilitator capabilities that allow software platforms to onboard and monetise their own merchant base."
+      negative:
+        - "We offer a range of merchant services including terminals and gateway connectivity."
+
+  - id: take_rate_compression
+    name: "Take rate / spread compression"
+    definition: >
+      Pricing pressure on the filer's revenue per unit of volume, including
+      mix shift toward lower-yield volume, large-merchant renegotiation, or
+      explicit spread compression.
+    includes:
+      - Revenue growth lagging volume growth as a stated dynamic
+      - Pricing concessions to retain merchants
+    excludes:
+      - Cost inflation with no revenue-yield mechanism
+    keywords:
+      - "take rate"
+      - "spread compression"
+      - "pricing pressure"
+      - "yield"
+      - "revenue per transaction"
+      - "pricing concessions"
+    examples:
+      positive:
+        - "Our take rate declined year over year, reflecting a shift in mix toward larger merchants with lower negotiated pricing."
+      negative:
+        - "Cost of revenue increased due to higher personnel expense."
+
+  - id: interchange_regulation
+    name: "Interchange & routing regulation"
+    definition: >
+      Regulatory or litigation exposure specific to interchange, network fees,
+      or routing mandates.
+    includes:
+      - Durbin Amendment, Regulation II debit routing
+      - Credit Card Competition Act and comparable proposals
+      - Interchange antitrust litigation and settlements
+    excludes:
+      - General financial regulation, licensing, AML (use regulatory_licensing_aml)
+    keywords:
+      - "interchange"
+      - "durbin"
+      - "regulation ii"
+      - "routing"
+      - "credit card competition act"
+      - "network fees"
+    examples:
+      positive:
+        - "Proposed legislation would require additional network routing options for credit transactions, which could reduce our interchange-related revenue."
+      negative:
+        - "We are subject to money transmitter licensing requirements in most states."
+
+  - id: regulatory_licensing_aml
+    name: "Licensing, AML & sponsor bank risk"
+    definition: >
+      Money transmission licensing, AML/KYC obligations, consent orders, and
+      dependence on sponsor bank relationships to access card networks.
+    keywords:
+      - "money transmitter"
+      - "anti-money laundering"
+      - "know your customer"
+      - "sponsor bank"
+      - "consent order"
+      - "licensing requirements"
+    examples:
+      positive:
+        - "We rely on sponsor bank relationships to access the card networks, and the loss of a sponsor bank would disrupt our ability to process."
+      negative:
+        - "Interchange fees are set by the card networks."
+
+  - id: crossborder_fx_dependence
+    name: "Cross-border & FX dependence"
+    definition: >
+      Reliance on cross-border transaction volume or foreign exchange spread as
+      a revenue driver, and exposure to corridor-specific disruption.
+    keywords:
+      - "cross-border"
+      - "foreign exchange"
+      - "fx spread"
+      - "corridor"
+      - "remittance"
+      - "currency conversion"
+    examples:
+      positive:
+        - "A meaningful portion of our revenue is derived from foreign exchange spreads on cross-border transactions."
+      negative:
+        - "We translate the results of foreign subsidiaries into US dollars at period-end rates."
+
+  - id: stablecoin_crypto_rails
+    name: "Stablecoin & crypto rails"
+    definition: >
+      Stablecoin settlement, crypto acceptance, digital asset custody, or
+      tokenised money movement as an opportunity or a competitive threat.
+    keywords:
+      - "stablecoin"
+      - "digital asset"
+      - "cryptocurrency"
+      - "blockchain"
+      - "tokenized"
+      - "distributed ledger"
+    examples:
+      positive:
+        - "Settlement using stablecoins could reduce the cost of cross-border money movement and may disintermediate existing rails."
+      negative:
+        - "We accept a variety of payment methods including cards and bank transfers."
+
+  - id: legacy_platform_modernization
+    name: "Legacy platform modernisation"
+    definition: >
+      Technical debt in core processing platforms, multi-year re-platforming or
+      cloud migration programmes, and integration debt from prior acquisitions.
+    keywords:
+      - "legacy systems"
+      - "modernization"
+      - "re-platform"
+      - "cloud migration"
+      - "technology infrastructure"
+      - "integration of acquired"
+    examples:
+      positive:
+        - "Certain of our processing platforms rely on legacy technology, and our modernisation programme may not deliver expected benefits on schedule."
+      negative:
+        - "We invest in research and development to enhance our product offerings."
+
+  - id: bank_channel_dependence
+    name: "Bank channel dependence"
+    definition: >
+      Dependence on financial institution referral relationships, joint
+      ventures, or bank-owned distribution for merchant acquisition.
+    keywords:
+      - "financial institution referral"
+      - "bank partners"
+      - "joint venture"
+      - "referral arrangements"
+      - "distribution partners"
+    examples:
+      positive:
+        - "A significant portion of new merchant accounts is sourced through referral arrangements with financial institutions."
+      negative:
+        - "We maintain deposit accounts with several financial institutions."
+
+  - id: smb_attrition_credit
+    name: "SMB attrition & merchant credit risk"
+    definition: >
+      Small-merchant churn, attrition rates, merchant failure, and the filer's
+      own credit exposure to merchants through chargebacks or advances.
+    keywords:
+      - "attrition"
+      - "merchant churn"
+      - "small and medium"
+      - "chargeback"
+      - "merchant credit"
+      - "small business failure"
+    examples:
+      positive:
+        - "Our small business merchants experience elevated failure rates, and we bear chargeback exposure when a merchant ceases operations."
+      negative:
+        - "We serve merchants of all sizes across many verticals."
+
+  - id: ai_deployment
+    name: "AI deployment"
+    definition: >
+      Use of machine learning or generative AI in the filer's own operations or
+      products — fraud scoring, underwriting, support automation — or AI named
+      as a competitive or risk factor.
+    keywords:
+      - "artificial intelligence"
+      - "machine learning"
+      - "generative ai"
+      - "large language model"
+      - "automation"
+    examples:
+      positive:
+        - "We deploy machine learning models in underwriting and fraud detection, and errors in these models could result in losses."
+      negative:
+        - "We use data analytics to understand merchant behaviour."
+
+  - id: consumer_credit_bnpl
+    name: "Consumer credit & BNPL"
+    definition: >
+      Buy-now-pay-later products, consumer lending exposure, and associated
+      credit loss or regulatory risk.
+    keywords:
+      - "buy now"
+      - "installment"
+      - "consumer credit"
+      - "credit losses"
+      - "lending products"
+    examples:
+      positive:
+        - "Our buy now, pay later product exposes us to consumer credit losses that may increase in a weakening economy."
+      negative:
+        - "We extend trade credit to certain enterprise customers."
+
+# Sections of the 10-K that get classified. Item 1A and Item 7 carry the
+# strategic language; Item 1 is included because competitive framing often
+# appears in the business description first.
+sections_in_scope:
+  - "item1"
+  - "item1a"
+  - "item7"

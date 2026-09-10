@@ -1,0 +1,63 @@
+# Peer set for the merchant acquiring / payments disclosure study.
+#
+# Only tickers are stored here. CIKs are resolved at runtime from the SEC's
+# official ticker map (https://www.sec.gov/files/company_tickers.json) so that
+# no identifier in this repo can silently go stale or be wrong.
+#
+# Inclusion rule: US domestic filers that file a 10-K. Foreign private issuers
+# (dLocal, Lightspeed, Adyen, Nuvei) file 20-F/40-F with a different item
+# structure and are deliberately excluded so section parsing stays consistent.
+
+study:
+  name: "Merchant acquiring disclosure study"
+  start_fiscal_year: 2020
+  end_fiscal_year: 2025
+  forms: ["10-K"]
+
+cohorts:
+  - id: incumbent
+    label: "Legacy processors & merchant acquirers"
+    thesis: >
+      Built on bank referral channels and direct sales forces. The question is
+      when each one began describing integrated software vendors as a
+      competitive threat rather than a distribution partner.
+    members:
+      - { ticker: FI,   name: "Fiserv, Inc." }
+      - { ticker: FIS,  name: "Fidelity National Information Services, Inc." }
+      - { ticker: GPN,  name: "Global Payments Inc." }
+      - { ticker: CPAY, name: "Corpay, Inc." }          # formerly FLEETCOR (FLT) until 2024
+      - { ticker: WEX,  name: "WEX Inc." }
+      - { ticker: EEFT, name: "Euronet Worldwide, Inc." }
+
+  - id: software_led
+    label: "Software-led & integrated payments"
+    thesis: >
+      Own the merchant relationship through the point-of-sale or platform layer
+      and monetise payments downstream of it.
+    members:
+      - { ticker: TOST, name: "Toast, Inc." }
+      - { ticker: FOUR, name: "Shift4 Payments, Inc." }
+      - { ticker: XYZ,  name: "Block, Inc." }           # traded as SQ before Jan 2025
+      - { ticker: PYPL, name: "PayPal Holdings, Inc." }
+      - { ticker: MQ,   name: "Marqeta, Inc." }
+
+  - id: specialist
+    label: "Cross-border & vertical specialists"
+    thesis: >
+      Narrow corridors or verticals; useful as a control group because their
+      exposure to ISV channel shift should be structurally lower.
+    members:
+      - { ticker: RELY, name: "Remitly Global, Inc." }
+      - { ticker: FLYW, name: "Flywire Corporation" }
+      - { ticker: PAYO, name: "Payoneer Global Inc." }
+
+# Companies whose filing history starts mid-window (IPO/de-SPAC). The analysis
+# must not treat "no mention in FY2020" as silence for these — it is absence of
+# a filing. `timeline.py` reads this and censors them.
+partial_history:
+  TOST: 2021   # IPO Sept 2021, first 10-K covers FY2021
+  MQ:   2021   # IPO June 2021
+  RELY: 2021   # IPO Sept 2021
+  FLYW: 2021   # IPO May 2021
+  PAYO: 2021   # de-SPAC June 2021
+  FOUR: 2020   # IPO June 2020
